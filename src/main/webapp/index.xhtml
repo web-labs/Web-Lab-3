@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Web Lab 3</title>
+    <h:outputStylesheet library="styles" name="main.css"/>
+</h:head>
+<h:body>
+
+    <h:panelGroup layout="block" styleClass="header-text">
+        <h:outputText value="Nazemtsev Sergei Dmitryevitch P3211 4133"/>
+    </h:panelGroup>
+
+
+        <div class="clock-container" style="background-image: url('ahahaha.png')">
+                <div class="clock-face">
+                    <div class="hour"></div>
+                    <div class="minute"></div>
+                    <div class="second"></div>
+                    <div class="circle"></div>
+                    <div class="date-window"></div>
+                </div>
+            </div>
+
+
+    <h:panelGroup layout="block">
+        <h:button outcome="goToMain" value="Go to Main" styleClass="abstract-util-button return-button" style="margin-top: 10px"/>
+    </h:panelGroup>
+
+
+    <h:outputScript name="scripts/clockManager.js" target="body"/>
+</h:body>
+</html>
