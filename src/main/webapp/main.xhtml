@@ -45,7 +45,7 @@
 
 
                 <h:commandButton value="Send" styleClass="submit-btn">
-                    <f:ajax execute="@form" listener="#{resultsControllerBean.addResult(xBean.XValue, yBean.YValue, rBean.RValue)}" render="@form results-table"/>
+                    <f:ajax execute="@form" listener="#{resultsControllerBean.addResult(xBean.XValue, yBean.YValue, rBean.RValue, 'shit')}" render="@form results-table"/>
                 </h:commandButton>
 
 
@@ -58,7 +58,7 @@
                 </h:panelGroup>
 
                 <p:remoteCommand name="sendCoordinatesToServer"
-                                 action="#{resultsControllerBean.addResult(coordinateHandlerBean.x, coordinateHandlerBean.y, rBean.RValue)}"
+                                 action="#{resultsControllerBean.addResult(coordinateHandlerBean.x, coordinateHandlerBean.y, rBean.RValue, 'shit')}"
                                  update="xValue yValue results-table myForm" />
 
                 <h:inputHidden id="xValue" value="#{coordinateHandlerBean.x}" />

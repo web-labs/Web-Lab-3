@@ -57,12 +57,16 @@ public class ResultsControllerBean implements Serializable {
         }
     }
 
+    public void setDatabaseConnector(DatabaseConnector databaseConnector){
+        this.databaseConnector = databaseConnector;
+    }
+
     public void setResults(LinkedList<AreaCheckerBean> results){
         this.results = results;
     }
 
 
-    public void addResult(final double x, final double y, final double r){
+    public void addResult(final double x, final double y, final double r, final String status){
         final AreaCheckerBean currentRes = new AreaCheckerBean();
         final boolean result = AreaChecker.isInArea(x, y, r);
         currentRes.setX(x);
@@ -84,7 +88,9 @@ public class ResultsControllerBean implements Serializable {
             e.printStackTrace();
         }
 
-        FacesContext.getCurrentInstance().getPartialViewContext().getEvalScripts().add("drawPoint(" + x + ", " + y + ", " + r + ", " + result + ");");
+        if (!Objects.equals(status, "dbTest")){
+            FacesContext.getCurrentInstance().getPartialViewContext().getEvalScripts().add("drawPoint(" + x + ", " + y + ", " + r + ", " + result + ");");
+        }
         results.addFirst(currentRes);
 
         System.out.println(results.toString());
