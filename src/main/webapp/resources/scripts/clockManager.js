@@ -2,7 +2,8 @@ const hour = document.querySelector('.hour');
 const minute = document.querySelector('.minute');
 const second = document.querySelector('.second');
 const dateField = document.querySelector('.date-window')
-setInterval(() => {
+
+function synchroniseClock() {
     const d = new Date(); //object of date()
     const hr = d.getHours();
     const min = d.getMinutes();
@@ -17,4 +18,5 @@ setInterval(() => {
     second.style.transform = `rotate(${sec_rotation}deg)`;
 
     dateField.textContent = day.toString();
-}, 8000);
+}
+setInterval(synchroniseClock, 8000);

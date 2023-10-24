@@ -7,14 +7,14 @@
     <title>Web Lab 3</title>
     <h:outputStylesheet library="styles" name="main.css"/>
 </h:head>
-<h:body>
+<h:body style="background: url('background.png')" styleClass="main-container">
 
     <h:panelGroup layout="block" styleClass="header-text">
         <h:outputText value="Nazemtsev Sergei Dmitryevitch P3211 4133"/>
     </h:panelGroup>
 
 
-        <div class="clock-container" style="background-image: url('ahahaha.png')">
+        <div class="clock-container" style="background-image: url('exexexe.png')">
                 <div class="clock-face">
                     <div class="hour"></div>
                     <div class="minute"></div>
@@ -30,6 +30,7 @@
     </h:panelGroup>
 
 
+    <h:outputScript name="scripts/init.js"/>
     <h:outputScript name="scripts/clockManager.js" target="body"/>
 </h:body>
 </html>

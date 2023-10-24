@@ -73,34 +73,29 @@
             </h:form>
         </div>
 
-    <div>
-        <h:dataTable  id="results-table" var="result" value="#{resultsControllerBean.results}">
-            <h:column>
+        <h:dataTable styleClass="resultsTable" id="results-table" var="result" value="#{resultsControllerBean.results}">
+            <h:column styleClass="new-cell">
                 <f:facet name="header">X</f:facet>
                 #{result.x}
             </h:column>
 
-            <h:column>
+            <h:column styleClass="new-cell">
                 <f:facet name="header">Y</f:facet>
                 #{result.y}
             </h:column>
 
-            <h:column>
+            <h:column styleClass="new-cell">
                 <f:facet name="header">R</f:facet>
                 #{result.r}
             </h:column>
 
-            <h:column>
+            <h:column styleClass="new-cell">
                 <f:facet name="header">Result</f:facet>
                 #{result.result ? "In" : "Out"}
             </h:column>
         </h:dataTable>
-    </div>
 
 
-    <h:outputScript>
-
-    </h:outputScript>
     <h:outputScript>
         function updateCanvas() {
             var rValue = $('#myForm\\:decimal').val();
