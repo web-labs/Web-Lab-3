@@ -71,13 +71,13 @@ function drawCoordsPlane(r){
     ctx.fillText('y', 150, 15);
     ctx.fillText('x', 340, 195);
     ctx.fillText(String(r/2), halfWidth+quarterWidth, halfHeight-10);
-    ctx.fillText(r, 337, halfHeight-10);
+    ctx.fillText(r, 322, halfHeight-10);
     ctx.fillText(r, 190, 15);
     ctx.fillText(String(-r/2), 87.5, halfHeight-10);
     ctx.fillText(String(-r), 0, halfHeight-10);
 
-    ctx.fillText(String(-r), 155, canvas.height);
-    ctx.fillText(String(-r/2), 145, 262.5);
+    ctx.fillText(String(-r), 187, canvas.height);
+    ctx.fillText(String(-r/2), 187, 262.5);
 
     // Axes
     ctx.beginPath();

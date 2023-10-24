@@ -29,7 +29,7 @@ body {
 .header-text {
     text-align: center;
     width: 60%;
-    font-size: 20px;
+    font-size: 25px;
     color: var(--header-text);
     font-family: cursive;
     border: 3px solid lightgreen;
@@ -37,6 +37,7 @@ body {
     padding: 1%;
     margin: auto;
     display: block;
+    font-weight: bold;
 }
 
 
@@ -214,10 +215,6 @@ body {
 
 .clear-button{
     background-color: darkred;
-}
-
-.return-button{
-    background-color: #008CBA;
 }
 
 .main-container{

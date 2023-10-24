@@ -28,8 +28,12 @@
 
 
                 <h:outputLabel for="x" value="Coordinate X (-5; 5)"/>
-                <h:inputText id="x" styleClass="coords-input" value="#{xBean.XValue}" validator="#{xBean.validateXValue}" maxlength="7">
-                    <f:validateLongRange minimum="-5" maximum="5"/>
+                <h:inputText id="x" styleClass="coords-input" value="#{xBean.XValue}"
+                             required="true" maxlength="7"
+                             requiredMessage="Value X is required"
+                             validatorMessage="The value must be from -5 to 5">
+                    <f:converter converterId="javax.faces.Double"/>
+                    <f:validateDoubleRange minimum="-5" maximum="5"/>
                 </h:inputText>
 
                 <h:outputLabel for="y" value="Coordanate Y"/>
@@ -54,7 +58,7 @@
                     <h:commandButton value="Clear table" styleClass="abstract-util-button clear-button">
                         <f:ajax execute="@form" listener="#{resultsControllerBean.clearResults(rBean.RValue)}" render="@form results-table"/>
                     </h:commandButton>
-                    <h:button outcome="returnToIndex" value="Back to Start" styleClass="abstract-util-button return-button"/>
+                    <h:button outcome="returnToIndex" value="Back to Start" styleClass="abstract-util-button" style="background: #008CBA"/>
                 </h:panelGroup>
 
                 <p:remoteCommand name="sendCoordinatesToServer"
@@ -112,6 +116,7 @@
         drawCoordsPlane("#{rBean.RValue == null ? 0 : rBean.RValue}")
         restorePoints();
     </h:outputScript>
+
 
 </h:body>
 </html>
