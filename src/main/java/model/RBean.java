@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class RBean implements Serializable {
 
-    private Double rValue;
+    private Double rValue = 2.25;
 
     public Double getRValue(){
         return rValue;

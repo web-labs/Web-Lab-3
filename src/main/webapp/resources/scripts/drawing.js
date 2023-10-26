@@ -133,8 +133,8 @@ canvas.addEventListener('click', function(event){
 })
 
 function sendCoordinates(x, y) {
-    document.getElementById('myForm:xValue').value = x;
-    document.getElementById('myForm:yValue').value = y;
+    document.getElementById('graph-form:xValue').value = x;
+    document.getElementById('graph-form:yValue').value = y;
     // document.getElementById('myForm:rValue').value = r;
     // document.getElementById('myForm:hiddenButton').click();
 

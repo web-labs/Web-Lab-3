@@ -7,7 +7,7 @@ import java.time.Duration;
 import java.util.Objects;
 
 public class YBean implements Serializable {
-    private Double yValue;
+    private Double yValue = 1.0;
 
     public Double getYValue(){
         return yValue;

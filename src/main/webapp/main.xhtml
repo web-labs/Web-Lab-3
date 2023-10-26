@@ -17,87 +17,78 @@
     </h:panelGroup>
 
 
-        <h:panelGroup id="set-canvas" layout="block">
-            <canvas id="canvas" class="draw">Unsupported</canvas>
-        </h:panelGroup>
+    <h:panelGroup id="set-canvas" layout="block">
+        <canvas id="canvas" class="draw">Unsupported</canvas>
+    </h:panelGroup>
 
 
-        <div class="form-container">
-            <h:form id="myForm">
-                <p:growl id="growl" showDetail="true"/>
+    <div class="form-container">
+        <h:form id="myForm">
 
+            <h:outputLabel for="x" value="Coordinate X (-5; 5)"/>
+            <h:inputText id="x" styleClass="coords-input" value="#{xBean.XValue}"
+                         required="true" maxlength="7"
+                         requiredMessage="Value X is required"
+                         validatorMessage="The value must be from -5 to 5">
+                <f:converter converterId="javax.faces.Double"/>
+                <f:validateDoubleRange minimum="-5" maximum="5"/>
+            </h:inputText>
 
-                <h:outputLabel for="x" value="Coordinate X (-5; 5)"/>
-                <h:inputText id="x" styleClass="coords-input" value="#{xBean.XValue}"
-                             required="true" maxlength="7"
-                             requiredMessage="Value X is required"
-                             validatorMessage="The value must be from -5 to 5">
-                    <f:converter converterId="javax.faces.Double"/>
-                    <f:validateDoubleRange minimum="-5" maximum="5"/>
-                </h:inputText>
+            <h:outputLabel for="y" value="Coordanate Y"/>
+            <p:spinner id="y" value="#{yBean.YValue}" min="-5" max="5" styleClass="coords-input">
+            </p:spinner>
 
-                <h:outputLabel for="y" value="Coordanate Y"/>
-                <p:spinner id="y" value="#{yBean.YValue}" min="-5" max="5" styleClass="coords-input">
-                </p:spinner>
-
-                <h:outputLabel for="r" value="Range R"/><br/>
-                <h:panelGrid columns="1" style="margin-bottom: 10px" id="r">
-                    <p:inputText id="decimal" value="#{rBean.RValue}"/>
-                    <p:slider for="decimal" minValue="2" maxValue="5" step="0.25" range="false" onSlideEnd="updateCanvas();"/>
-                </h:panelGrid>
+            <h:outputLabel for="r" value="Range R"/><br/>
+            <h:panelGrid columns="1" style="margin-bottom: 10px" id="r">
+                <p:inputText id="decimal" value="#{rBean.RValue}"/>
+                <p:slider for="decimal" minValue="2" maxValue="5" step="0.25" range="false" onSlideEnd="updateCanvas();"/>
+            </h:panelGrid>
 
 
 
-                <h:commandButton value="Send" styleClass="submit-btn">
-                    <f:ajax execute="@form" listener="#{resultsControllerBean.addResult(xBean.XValue, yBean.YValue, rBean.RValue, 'shit')}" render="@form results-table"/>
+            <h:commandButton value="Send" styleClass="submit-btn">
+                <f:ajax execute="@form" listener="#{resultsControllerBean.addResult(xBean.XValue, yBean.YValue, rBean.RValue, 'shit')}" render="@form results-table"/>
+            </h:commandButton>
+
+
+            <h:panelGroup layout="block" styleClass="fieldset-like">
+                <h:outputText value="Util Buttons" styleClass="legend"/>
+                <h:commandButton value="Clear table" styleClass="abstract-util-button clear-button">
+                    <f:ajax execute="@form" listener="#{resultsControllerBean.clearResults(rBean.RValue)}" render="@form results-table"/>
                 </h:commandButton>
+                <h:button outcome="returnToIndex" value="Back to Start" styleClass="abstract-util-button" style="background: #008CBA"/>
+            </h:panelGroup>
 
 
-                <h:panelGroup layout="block" styleClass="fieldset-like">
-                    <h:outputText value="Util Buttons" styleClass="legend"/>
-                    <h:commandButton value="Clear table" styleClass="abstract-util-button clear-button">
-                        <f:ajax execute="@form" listener="#{resultsControllerBean.clearResults(rBean.RValue)}" render="@form results-table"/>
-                    </h:commandButton>
-                    <h:button outcome="returnToIndex" value="Back to Start" styleClass="abstract-util-button" style="background: #008CBA"/>
-                </h:panelGroup>
+            <p:remoteCommand name="updateRValueOnServer" action="#{resultsControllerBean.updateRValue(rBean.RValue)}" update="myForm"/>
 
-                <p:remoteCommand name="sendCoordinatesToServer"
-                                 action="#{resultsControllerBean.addResult(coordinateHandlerBean.x, coordinateHandlerBean.y, rBean.RValue, 'shit')}"
-                                 update="xValue yValue results-table myForm" />
+            <p:remoteCommand name="restorePoints" action="#{resultsControllerBean.generateRedrawScript()}"
+                             update="myForm"/>
 
-                <h:inputHidden id="xValue" value="#{coordinateHandlerBean.x}" />
-                <h:inputHidden id="yValue" value="#{coordinateHandlerBean.y}" />
+        </h:form>
+    </div>
 
-                <p:remoteCommand name="updateRValueOnServer" action="#{resultsControllerBean.updateRValue(rBean.RValue)}" update="myForm"/>
+    <h:dataTable styleClass="resultsTable" id="results-table" var="result" value="#{resultsControllerBean.results}">
+        <h:column styleClass="new-cell">
+            <f:facet name="header">X</f:facet>
+            #{result.x}
+        </h:column>
 
-                <p:remoteCommand name="restorePoints" action="#{resultsControllerBean.generateRedrawScript()}"
-                                 update="myForm"/>
+        <h:column styleClass="new-cell">
+            <f:facet name="header">Y</f:facet>
+            #{result.y}
+        </h:column>
 
+        <h:column styleClass="new-cell">
+            <f:facet name="header">R</f:facet>
+            #{result.r}
+        </h:column>
 
-            </h:form>
-        </div>
-
-        <h:dataTable styleClass="resultsTable" id="results-table" var="result" value="#{resultsControllerBean.results}">
-            <h:column styleClass="new-cell">
-                <f:facet name="header">X</f:facet>
-                #{result.x}
-            </h:column>
-
-            <h:column styleClass="new-cell">
-                <f:facet name="header">Y</f:facet>
-                #{result.y}
-            </h:column>
-
-            <h:column styleClass="new-cell">
-                <f:facet name="header">R</f:facet>
-                #{result.r}
-            </h:column>
-
-            <h:column styleClass="new-cell">
-                <f:facet name="header">Result</f:facet>
-                #{result.result ? "In" : "Out"}
-            </h:column>
-        </h:dataTable>
+        <h:column styleClass="new-cell">
+            <f:facet name="header">Result</f:facet>
+            #{result.result ? "In" : "Out"}
+        </h:column>
+    </h:dataTable>
 
 
     <h:outputScript>
@@ -117,6 +108,13 @@
         restorePoints();
     </h:outputScript>
 
+    <h:form id="graph-form">
+        <h:inputHidden id="xValue" value="#{coordinateHandlerBean.x}" />
+        <h:inputHidden id="yValue" value="#{coordinateHandlerBean.y}" />
+        <p:remoteCommand name="sendCoordinatesToServer"
+                         action="#{resultsControllerBean.addResult(coordinateHandlerBean.x, coordinateHandlerBean.y, rBean.RValue, 'shit')}"
+                         update="xValue yValue results-table myForm" />
+    </h:form>
 
 </h:body>
 </html>
