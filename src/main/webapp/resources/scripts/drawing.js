@@ -128,7 +128,7 @@ canvas.addEventListener('click', function(event){
 
     console.log(x, y, r)
     const normalCoords = toNormalCoords(x, y, r, 350);
-    sendCoordinates(normalCoords.x, normalCoords.y, r);
+    sendCoordinates(normalCoords.x, normalCoords.y);
     console.log(normalCoords.x, normalCoords.y, r)
 })
 
