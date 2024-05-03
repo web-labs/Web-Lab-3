@@ -284,16 +284,16 @@ body {
 }
 .date-window {
     position: absolute;
-    width: 77px; /* adjust as necessary */
-    height: 48px; /* adjust as necessary */
-    bottom: 47%; /* adjust this to position correctly */
+    width: 77px; 
+    height: 48px; 
+    bottom: 47%; 
     left: 77%;
     transform: translateX(-50%);
-    background: #282828; /* you can adjust or remove this */
+    background: #282828; 
     text-align: center;
-    line-height: 25px; /* makes the text vertically centered */
-    font-size: 23px; /* adjust as necessary */
-    border: 1px solid black; /* adjust as necessary */
+    line-height: 25px; 
+    font-size: 23px;
+    border: 1px solid black;
     color: white;
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
 }
