@@ -13,11 +13,9 @@ public class YBean implements Serializable {
         return yValue;
     }
 
-
     public void setYValue(Double yValue){
         this.yValue = yValue;
     }
-
 
     @Override
     public boolean equals(Object o) {

@@ -1,0 +1,252 @@
+<project name="lab3" default="build" basedir=".">
+    <property file="build.properties"/>
+
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="lib/ant-contrib-0.3.jar"/>
+        </classpath>
+    </taskdef>
+
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="*.jar"/>
+        <fileset dir="${main.dir}" includes="*.java"/>
+    </path>
+
+    <path id="classpath.test">
+        <pathelement location="${build.classes.dir}"/>
+    </path>
+
+    <path id="all.dir">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+
+    <target name="clean">
+        <delete dir="${build.main}"/>
+    </target>
+
+    <target name="_compile">
+        <echo message="***** COMPILING STARTED *****"/>
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${build.test.classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${build.classes.dir}" classpathref="classpath"/>
+        <echo message="***** COMPILING COMPLETED *****"/>
+    </target>
+    <target name="compile" depends="clean">
+        <antcall target="_compile"/>
+    </target>
+
+    <target name="_build">
+        <echo message="***** BUILDING STARTED *****"/>
+        <copy todir="${build.dir}">
+            <fileset dir="${web.dir}"/>
+        </copy>
+        <copy todir="${build.dir.lib}">
+            <fileset dir="${lib.dir}"/>
+        </copy>
+        <copy todir="${build.classes.dir}">
+            <fileset dir="${resources.dir}"/>
+        </copy>
+        <mkdir dir="${build.dir}/META-INF"/>
+        <jar destfile="${build.dir}/${ant.project.name}.jar">
+            <fileset dir="${build.classes.dir}"/>
+            <manifest>
+                <attribute name="Created-By" value="Trash from ash"/>
+                <attribute name="Manifest-Version" value="1.0"/>
+                <attribute name="Main-Class" value="Main"/>
+                <attribute name="Implementation-Version" value="${project.version}"/>
+            </manifest>
+        </jar>
+        <war destfile="${build.dir}/${ant.project.name}.war" webxml="${build.webxml}">
+            <fileset dir="${build.dir}"/>
+            <manifest>
+                <attribute name="Created-By" value="Trash from ash"/>
+                <attribute name="Manifest-Version" value="1.0"/>
+                <attribute name="Main-Class" value="NoClass"/>
+                <attribute name="Implementation-Version" value="${project.version}"/>
+            </manifest>
+        </war>
+        <echo message="***** BUILDING COMPLETED *****"/>
+    </target>
+
+    <target name="build" depends="compile">
+        <antcall target="_build"/>
+    </target>
+
+<!--    TODO: понять почему тег fail не работает-->
+    <target name="music">
+        <trycatch>
+            <try>
+                <antcall target="build"/>
+                <exec executable="C:\Program Files (x86)\VideoLAN\VLC\vlc.exe" spawn="true">
+                    <arg value="--play-and-exit"/>
+                    <arg file="C:\Users\user\IdeaProjects\Web_Lab3\build_success.wav"/>
+                </exec>
+                <echo message="***** BUILD SUCCESSFUL *****"/>
+            </try>
+            <catch>
+                <exec executable="C:\Program Files (x86)\VideoLAN\VLC\vlc.exe" spawn="true">
+                    <arg value="--play-and-exit"/>
+                    <arg file="C:\Users\user\IdeaProjects\Web_Lab3\build_fail.wav"/>
+                </exec>
+                <echo message="***** BUILD FAILED *****"/>
+            </catch>
+        </trycatch>
+    </target>
+
+
+    <target name="doc">
+        <checksum todir="ant/checksums" format="MD5SUM" totalproperty="md5" forceOverwrite="yes">
+            <fileset dir="${web.dir}"/>
+            <fileset dir="${src.dir}"/>
+        </checksum>
+        <checksum todir="ant/checksums" algorithm="SHA-1" totalproperty="sha1" forceOverwrite="yes">
+            <fileset dir="${web.dir}"/>
+            <fileset dir="${src.dir}"/>
+        </checksum>
+        <propertyfile file="build.properties">
+            <entry key="info.md5" value="${info.md5}"/>
+            <entry key="info.sha1" value="${info.sha1}"/>
+        </propertyfile>
+        <manifest file="${resources.dir}/META-INF/MANIFEST.MF">
+            <attribute name="SHA1-Digest" value="${info.sha1}"/>
+            <attribute name="MD5-Digest" value="${info.md5}"/>
+        </manifest>
+        <delete dir="${doc.dir}"/>
+        <mkdir dir="${doc.dir}"/>
+        <javadoc destdir="${doc.dir}"
+                 author="true"
+                 version="true"
+                 use="true">
+            <classpath refid="classpath"/>
+            <fileset dir="${src.dir}"/>
+        </javadoc>
+        <jar destfile="${doc.dir}/docs.jar"
+             basedir="${doc.dir}"
+             update="true">
+        </jar>
+    </target>
+
+<!--    TODO: написать тесты-->
+    <path id="classpath.test">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+        <fileset dir="${build.dir}" includes="**/*.class"/>
+    </path>
+
+    <target name="test" depends="build">
+        <echo message="***** TESTING STARTED *****"/>
+
+        <mkdir dir="${build.test.classes.dir}"/>
+        <mkdir dir="${test.results.dir}"/>
+
+        <copy todir="${build.test.resources.dir}">
+            <fileset dir="${test.resources.dir}"/>
+        </copy>
+
+        <javac srcdir="${test.dir}"
+               destdir="${build.test.classes.dir}"
+               classpathref="classpath.test"
+               includeantruntime="false">
+            <classpath location="ant/build/WEB-INF/classes"/>
+        </javac>
+
+        <echo>Хуй ахаха</echo>
+
+        <junitlauncher haltOnFailure="no">
+            <classpath refid="all.dir"/>
+
+            <classpath>
+                <pathelement location="${build.test.classes.dir}"/>
+            </classpath>
+
+            <classpath location="ant/build/WEB-INF/classes"/>
+
+            <testclasses outputdir="${test.results.dir}">
+
+                <fileset dir="${build.test.classes.dir}">
+                    <include name="**/*Test*"/>
+                </fileset>
+
+                <listener type="legacy-brief" sendSysOut="true"/>
+                <listener type="legacy-xml" sendSysErr="true " sendSysOut="true"/>
+            </testclasses>
+        </junitlauncher>
+        <echo message="***** TESTING COMPLETED *****"/>
+    </target>
+
+
+    <exec executable="git" outputproperty="last.revision">
+        <arg line="rev-parse HEAD^"/>
+    </exec>
+
+    <exec executable="git" outputproperty="preLast.revision">
+        <arg line="rev-parse HEAD^^"/>
+    </exec>
+
+
+
+    <target name="history">
+        <echo message="***** HISTORY START *****"/>
+        <trycatch>
+            <try>
+                <antcall target="compile"/>
+                <echo>CURRENT COMMIT IS OK</echo>
+            </try>
+            <catch>
+                <load-previous-revision/>
+                <exec executable="git" outputproperty="git.curr_commit">
+                    <arg value="rev-parse"/>
+                    <arg value="HEAD"/>
+                </exec>
+                <echo message="Here we are: ${git.curr_commit}"/>
+            </catch>
+        </trycatch>
+        <echo message="***** DIFF END *****"/>
+    </target>
+
+    <macrodef name="load-previous-revision">
+        <sequential>
+            <exec executable="git" outputproperty="git.next_commit">
+                <arg value="rev-parse"/>
+                <arg value="HEAD"/>
+            </exec>
+            <exec executable="git" outputproperty="git.reverse_commits">
+                <arg value="log"/>
+                <arg value="--pretty=oneline"/>
+                <arg value="--reverse"/>
+            </exec>
+            <propertyregex property="git.first_commit" input="${git.reverse_commits}" regexp="(\w+)" select="\1"/>
+            <if>
+                <not>
+                    <equals arg1="${git.first_commit}" arg2="${git.next_commit}"/>
+                </not>
+                <then>
+                    <echo>Checking previous versions...</echo>
+                    <exec executable="git">
+                        <arg value="checkout"/>
+                        <arg value="-f"/>
+                        <arg value="HEAD^"/>
+                    </exec>
+                    <trycatch>
+                        <try>
+                            <antcall target="compile"/>
+                            <exec executable="git">
+                                <arg value="diff"/>
+                                <arg value="${git.next_commit}"/>
+                                <redirector output="history_diff.txt"/>
+                            </exec>
+
+                            <exec executable="git">
+                                <arg value="checkout"/>
+                                <arg value="main"/>
+                            </exec>
+                        </try>
+                        <catch>
+                            <load-previous-revision/>
+                        </catch>
+                    </trycatch>
+                </then>
+            </if>
+        </sequential>
+    </macrodef>
+</project>
