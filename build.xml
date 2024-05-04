@@ -150,9 +150,7 @@
             <classpath location="ant/build/WEB-INF/classes"/>
         </javac>
 
-        <echo>Хуй ахаха</echo>
-
-        <junitlauncher haltOnFailure="no">
+        <junitlauncher haltOnFailure="yes">
             <classpath refid="all.dir"/>
 
             <classpath>

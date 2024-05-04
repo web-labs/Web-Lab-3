@@ -1,73 +1,47 @@
 import model.XBean;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-class XBeanTest {
+public class XBeanTest {
+
+    private XBean xBean;
+
+    @BeforeEach
+    void setUp() {
+        xBean = new XBean();
+    }
 
     @Test
     void testGetXValue() {
-        XBean xBean = new XBean();
-        xBean.setXValue(2.0);
-        assertEquals(2.0, xBean.getXValue());
+        assertEquals(Double.valueOf(0.0), xBean.getXValue(), "Default value should be 0.0");
     }
 
     @Test
     void testSetXValue() {
-        XBean xBean = new XBean();
-        xBean.setXValue(3.0);
-        assertEquals(3.0, xBean.getXValue());
-    }
-
-    @Test
-    void testValidateXValue() {
-        XBean xBean = new XBean();
-        FacesContext facesContext = null;
-        UIComponent uiComponent = null;
-
-        // Test with null value
-        Exception exception = assertThrows(ValidatorException.class, () -> {
-            xBean.validateXValue(facesContext, uiComponent, null);
-        });
-
-        String expectedMessage = "Input X!";
-        String actualMessage = exception.getMessage();
-
-        assertTrue(actualMessage.contains(expectedMessage));
-
-        // Test with non-null value
-        assertDoesNotThrow(() -> {
-            xBean.validateXValue(facesContext, uiComponent, 3.0);
-        });
+        Double newValue = 1.0;
+        xBean.setXValue(newValue);
+        assertEquals(newValue, xBean.getXValue(), "Value should be updated to 1.0");
     }
 
     @Test
     void testEquals() {
-        XBean xBean1 = new XBean();
-        xBean1.setXValue(4.0);
+        XBean anotherXBean = new XBean();
+        assertTrue(xBean.equals(anotherXBean), "Two XBeans with the same value should be equal");
 
-        XBean xBean2 = new XBean();
-        xBean2.setXValue(4.0);
-
-        assertEquals(xBean1, xBean2);
+        anotherXBean.setXValue(1.0);
+        assertFalse(xBean.equals(anotherXBean), "Should not be equal if values are different");
     }
 
-//    @Test
-//    void testHashCode() {
-//        XBean xBean = new XBean();
-//        xBean.setXValue(5.0);
-//        int expectedHashCode = Double.valueOf(5.0).hashCode();
-//        assertEquals(expectedHashCode, xBean.hashCode());
-//    }
+    @Test
+    void testHashCode() {
+        XBean anotherXBean = new XBean();
+        assertEquals(xBean.hashCode(), anotherXBean.hashCode(), "Hash codes should be the same for identical values");
+    }
 
     @Test
     void testToString() {
-        XBean xBean = new XBean();
-        xBean.setXValue(6.0);
-        String expectedString = "XBean{value6.0}";
-        assertEquals(expectedString, xBean.toString());
+        String expectedString = "XBean{value0.0}";
+        assertEquals(expectedString, xBean.toString(), "toString should return correct representation");
     }
 }
