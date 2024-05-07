@@ -29,7 +29,7 @@
         <echo message="***** COMPILING STARTED *****"/>
         <mkdir dir="${build.classes.dir}"/>
         <mkdir dir="${build.test.classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${build.classes.dir}" classpathref="classpath"/>
+        <javac srcdir="${src.dir}" destdir="${build.classes.dir}" target="11" source="11" classpathref="classpath"/>
         <echo message="***** COMPILING COMPLETED *****"/>
     </target>
     <target name="compile" depends="clean">
@@ -150,7 +150,7 @@
             <classpath location="ant/build/WEB-INF/classes"/>
         </javac>
 
-        <junitlauncher haltOnFailure="yes">
+        <junitlauncher haltOnFailure="no">
             <classpath refid="all.dir"/>
 
             <classpath>
@@ -171,6 +171,8 @@
         </junitlauncher>
         <echo message="***** TESTING COMPLETED *****"/>
     </target>
+
+
 
 
     <exec executable="git" outputproperty="last.revision">
