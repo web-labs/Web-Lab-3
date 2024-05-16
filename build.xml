@@ -29,7 +29,7 @@
         <echo message="***** COMPILING STARTED *****"/>
         <mkdir dir="${build.classes.dir}"/>
         <mkdir dir="${build.test.classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${build.classes.dir}" target="11" source="11" classpathref="classpath"/>
+        <javac srcdir="${src.dir}" destdir="${build.classes.dir}" classpathref="classpath"/>
         <echo message="***** COMPILING COMPLETED *****"/>
     </target>
     <target name="compile" depends="clean">
@@ -73,7 +73,6 @@
         <antcall target="_build"/>
     </target>
 
-<!--    TODO: понять почему тег fail не работает-->
     <target name="music">
         <trycatch>
             <try>
@@ -127,7 +126,7 @@
         </jar>
     </target>
 
-<!--    TODO: написать тесты-->
+    <!--    TODO: написать тесты-->
     <path id="classpath.test">
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
         <fileset dir="${build.dir}" includes="**/*.class"/>
