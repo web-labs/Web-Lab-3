@@ -2,11 +2,20 @@ package model;
 
 import database.DatabaseConnector;
 import database.DatabaseScripts;
+import mbeans.MissPercentage;
+import mbeans.MissPercentageMBean;
+import mbeans.PointsCounter;
+import mbeans.PointsCounterMBean;
 
 import javax.faces.context.FacesContext;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.management.MBeanServer;
+import javax.management.NotificationListener;
+import javax.management.ObjectName;
+import javax.management.StandardMBean;
 import java.io.Serializable;
+import java.lang.management.ManagementFactory;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -27,7 +36,10 @@ public class ResultsControllerBean implements Serializable {
 
 
     private LinkedList<AreaCheckerBean> results;
-
+    @Inject
+    private PointsCounterMBean pointsCounter;
+    @Inject
+    private MissPercentageMBean missPercentage;
 
     public ResultsControllerBean() {
         super();
@@ -51,10 +63,13 @@ public class ResultsControllerBean implements Serializable {
                 result.setR(resultSet.getDouble("rValue"));
                 result.setResult(resultSet.getBoolean("result"));
                 results.add(result);
+
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+
+
     }
 
     public void setDatabaseConnector(DatabaseConnector databaseConnector){
@@ -73,7 +88,16 @@ public class ResultsControllerBean implements Serializable {
         currentRes.setY(y);
         currentRes.setR(r);
         currentRes.setResult(result);
+        System.out.println("curr res: " + result);
+        System.out.println("all res: " + results);
 
+        if (result) {
+            pointsCounter.incrementTotalPoints();
+        } else {
+            pointsCounter.incrementTotalPoints();
+            pointsCounter.incrementMissedPoints();
+        }
+//        missPercentage.getMissPercentage();
 
         try (Connection connection = databaseConnector.connect();
              PreparedStatement statement = connection.prepareStatement(DatabaseScripts.ADD_POINT_DATA)){
@@ -98,6 +122,7 @@ public class ResultsControllerBean implements Serializable {
 
     public void clearResults(double rVal){
         results.clear();
+        pointsCounter.resetCounts(results);
         FacesContext.getCurrentInstance().getPartialViewContext().getEvalScripts().add("drawCoordsPlane(" + rVal + ");");
 
         try (Connection connection = databaseConnector.connect();
