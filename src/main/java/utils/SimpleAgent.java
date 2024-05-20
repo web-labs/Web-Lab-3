@@ -25,6 +25,8 @@ public class SimpleAgent implements Serializable {
     @Inject
     private PointsCounter pointsCounter;
 
+
+
     @Inject
     private MissPercentage missPercentage;
     @PostConstruct
